@@ -1,0 +1,23 @@
+#!/bin/bash
+# a script that downloads a sublime installer and runs it and downloads zsh for linux terminal
+
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+echo "uid is ${UID}"
+echo "user is ${USER}"
+echo "username is ${USERNAME}"
+
+
+
+#(http://stackoverflow.com/questions/7358611/bash-get-users-home-directory-when-they-run-a-script-as-root)
+USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
+
+
+#Gets username even if running as sudo http://stackoverflow.com/questions/3522341/identify-user-in-a-bash-script-called-by-sudo
+echo -e "\e[7m*** Creating temp location on /home/$SUDO_USER/chache/...\e[0m"
+
+#wget master.zip https://github.com/kazyka/sublime-text-linux-installer/archive/master.zip
