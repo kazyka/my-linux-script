@@ -35,14 +35,14 @@ done
 echo "Do you wish to install sublime-text-3?"
 select yn in "Yes" "No"; do
 	case $yn in
-		Yes ) #wget master.zip https://github.com/kazyka/sublime-text-linux-installer/archive/master.zip; 
+		Yes ) wget master.zip https://github.com/kazyka/sublime-text-linux-installer/archive/master.zip; 
 			  echo -e "\e[7m*** File downloaded\e[0m"
 			  unzip master.zip
 			  cd sublime-text-linux-installer-master
-			  #chmod +x ./st3install && sudo ./st3install
+			  chmod +x ./st3install && sudo ./st3install
 			  cd ..
-			  #rm -rf master.zip
-			  #rm -rf sublime-text-linux-installer-master
+			  rm -rf master.zip
+			  rm -rf sublime-text-linux-installer-master
 			  break;;
 		No ) break;;
 	esac
@@ -51,25 +51,27 @@ done
 echo "Do you wish to install zsh?"
 select yn in "Yes" "No"; do
 	case $yn in
-		Yes ) #wget master.zip https://github.com/kazyka/sublime-text-linux-installer/archive/master.zip; 
-			  echo -e "\e[7m*** File downloaded\e[0m"
-			  
-			  #cd 
-			  
-			  #cd ..
-			  #rm -rf master.zip
-			  #rm -rf sublime-text-linux-installer-master
-			  break;;
+		Yes )
+			 apt-get install zsh
+			 wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+			 	if [ ! "/usr/bin/zsh" = `which zsh` ]; then
+				#
+				echo -e "\e[7m*** Path don't match. Set to /bin/zsh\e[0m"
+				chsh
+				fi
+			 break;;
 		No ) break;;
 	esac
 done
 
 
-echo "Do you wish to install texlive and texmaker"
-select yn in "Yes" "No"; do
+echo "Do you wish to install texlive and/or texmaker"
+select yn in "Texlive" "Both" "No"; do
 	case $yn in
-		Yes )
-			#apt-get update && apt-get install texlive-full
+		Texlive )
+			apt-get update && apt-get install texlive-full
+			break;;
+		Both )
 			#Detects system
 			if [ "i686" = `uname -m` ]; then
 			#http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3000_x32.tar.bz2
@@ -77,32 +79,32 @@ select yn in "Yes" "No"; do
 				if [ "14.04" = `lsb_release -rs` ]; then
 				#
 				echo -e "\e[7m*** System 14.04 detected.\e[0m"
-				#wget http://www.xm1math.net/texmaker/texmaker_ubuntu_14.04_4.5_i386.deb
+				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_14.04_4.5_i386.deb
 				elif [ "15.04" = `lsb_release -rs` ]; then
 				#
 				echo -e "\e[7m*** System 15.04 detected.\e[0m"
-				#wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.04_4.5_i386.deb
+				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.04_4.5_i386.deb
 				elif [ "15.10" = `lsb_release -rs` ]; then
 				#
 				echo -e "\e[7m*** System 15.10 detected.\e[0m"
-				#wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.10_4.5_i386.deb
+				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.10_4.5_i386.deb
 				fi
 			elif [ "x86_64" = `uname -m` ]; then
-			#http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3000_x64.tar.bz2
 			echo -e "\e[7m*** System x86-64 detected.\e[0m"
 				if [ "14.04" = `lsb_release -rs` ]; then
 				#
 				echo -e "\e[7m*** System 14.04 detected.\e[0m"
-				#wget http://www.xm1math.net/texmaker/texmaker_ubuntu_14.04_4.5_amd64.deb -O texmaker.deb
+				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_14.04_4.5_amd64.deb -O texmaker.deb
 				elif [ "15.04" = `lsb_release -rs` ]; then
 				#
 				echo -e "\e[7m*** System 15.04 detected.\e[0m"
-				#wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.04_4.5_amd64.deb -O texmaker.deb
+				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.04_4.5_amd64.deb -O texmaker.deb
 				elif [ "15.10" = `lsb_release -rs` ]; then
 				#
 				echo -e "\e[7m*** System 15.10 detected.\e[0m"
-				#wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.10_4.5_amd64.deb -O texmaker.deb
+				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.10_4.5_amd64.deb -O texmaker.deb
 				fi
+				dpkg -i texmaker.deb
 			fi
 			 break;;
 		No ) break;;
@@ -111,5 +113,5 @@ done
 
 echo -e "\e[7m*** Deleting temp location on /home/$SUDO_USER/cache/...\e[0m"
 
-cd /home/$SUDO_USER/
-rm -rf cache
+#cd /home/$SUDO_USER/
+#rm -rf cache
