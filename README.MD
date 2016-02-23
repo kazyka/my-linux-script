@@ -14,6 +14,9 @@ This script will install, if you say yes
 * texlive
 * texmaker
 
+##TO-Do
+Check if zsh is installed then restart and then continue script
+
 
 ## License
 
