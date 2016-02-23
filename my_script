@@ -63,7 +63,8 @@ select yn in "Yes" "No"; do
 				fi
 				cd /usr/bin
 				./zsh
-				cd /home/$SUDO_USER/
+				#cd /home/$SUDO_USER/
+				cd $HOME
 			 break;;
 		No ) break;;
 	esac
