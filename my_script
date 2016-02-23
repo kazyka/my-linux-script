@@ -15,7 +15,6 @@ echo "username is ${USERNAME}"
 echo -e "\e[7m*** Creating temp location on /home/$SUDO_USER/cache/...\e[0m"
 
 cd $HOME
-rm -rf tempCache
 mkdir tempCache
 cd tempCache
 
@@ -104,5 +103,5 @@ done
 
 echo -e "\e[7m*** Deleting temp location on /home/$SUDO_USER/cache/...\e[0m"
 
-cd /home/$SUDO_USER/
-rm -rf cache
+cd $HOME
+rm -rf tempCache
