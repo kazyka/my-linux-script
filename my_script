@@ -14,12 +14,12 @@ echo "username is ${USERNAME}"
 #Gets username even if running as sudo http://stackoverflow.com/questions/3522341/identify-user-in-a-bash-script-called-by-sudo
 echo -e "\e[7m*** Creating temp location on /home/$SUDO_USER/cache/...\e[0m"
 
-cd $HOME
-mkdir tempCache
-cd tempCache
+#cd $HOME
+#mkdir tempCache
+#cd tempCache
 
-#mkdir -p $SUDO_USER/tempCache
-#cd $SUDO_USER/tempCache
+mkdir -p /home/$SUDO_USER/tempCache
+cd $SUDO_USER/tempCache
 
 #(http://stackoverflow.com/questions/7358611/bash-get-users-home-directory-when-they-run-a-script-as-root)
 USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
@@ -50,26 +50,6 @@ select yn in "Yes" "No"; do
 	esac
 done
 
-echo "Do you wish to install zsh?"
-select yn in "Yes" "No"; do
-	case $yn in
-		Yes )
-			 apt-get install zsh
-			 wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
-			 	if [ ! "/usr/bin/zsh" = `which zsh` ]; then
-				#
-				echo -e "\e[7m*** Path don't match. Set to /bin/zsh\e[0m"
-				chsh
-				fi
-				cd /usr/bin
-				./zsh
-				#cd /home/$SUDO_USER/
-				cd $HOME
-			 break;;
-		No ) break;;
-	esac
-done
-
 
 
 echo "Do you wish to install texlive and/or texmaker"
@@ -81,14 +61,14 @@ select yn in "Texlive" "Both" "No"; do
 		Both )
 			apt-get update && apt-get install texlive-full
 			URL="http://www.xm1math.net/texmaker/texmaker_ubuntu_"
+
 			#Detects system
 			if [ "i686" = `uname -m` ]; then
 			echo -e "\e[7m*** System x86 detected.\e[0m"
 			echo -e "\e[7m*** System "`lsb_release -rs`" detected.\e[0m"
 			
 			curl -o texmaker.deb $URL`lsb_release -rs`"_4.5_i386.deb"
-
-
+			
 			elif [ "x86_64" = `uname -m` ]; then
 			echo -e "\e[7m*** System x86-64 detected.\e[0m"
 			echo -e "\e[7m*** System "`lsb_release -rs`" detected.\e[0m"
@@ -102,7 +82,30 @@ select yn in "Texlive" "Both" "No"; do
 	esac
 done
 
+echo "Do you wish to install zsh?"
+select yn in "Yes" "No"; do
+	case $yn in
+		Yes )
+			 apt-get install zsh
+			 wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+			 	if [ ! "/usr/bin/zsh" = `which zsh` ]; then
+				#
+				echo -e "\e[7m*** Path don't match. Set to /bin/zsh\e[0m"
+				chsh
+				fi
+				cd /usr/bin
+				./zsh
+				cd /home/$SUDO_USER/
+				#cd $HOME
+			 break;;
+		No ) break;;
+	esac
+done
+
 echo -e "\e[7m*** Deleting temp location on /home/$SUDO_USER/cache/...\e[0m"
 
-cd $HOME
+#cd $HOME
+#rm -rf tempCache
+
+cd /home/$SUDO_USER/
 rm -rf tempCache
