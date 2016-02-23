@@ -7,6 +7,13 @@ To run this script type this in the terminal
 chmod +x ./my_script && sudo ./my_script
 ```
 
+This script will install, if you say yes
+* Git
+* Sublime text 3
+* zsh
+* texlive
+* texmaker
+
 
 ## License
 
