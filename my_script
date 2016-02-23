@@ -1,6 +1,6 @@
 #!/bin/bash
 # a script that downloads a sublime installer and runs it and downloads zsh for linux terminal
-
+-e
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run as root" 1>&2
@@ -11,17 +11,20 @@ echo "uid is ${UID}"
 echo "user is ${USER}"
 echo "username is ${USERNAME}"
 
+#Gets username even if running as sudo http://stackoverflow.com/questions/3522341/identify-user-in-a-bash-script-called-by-sudo
+echo -e "\e[7m*** Creating temp location on /home/$SUDO_USER/cache/...\e[0m"
 
+cd $HOME
+rm -rf tempCache
+mkdir tempCache
+cd tempCache
+
+#mkdir -p $SUDO_USER/tempCache
+#cd $SUDO_USER/tempCache
 
 #(http://stackoverflow.com/questions/7358611/bash-get-users-home-directory-when-they-run-a-script-as-root)
 USER_HOME=$(getent passwd $SUDO_USER | cut -d: -f6)
 
-
-#Gets username even if running as sudo http://stackoverflow.com/questions/3522341/identify-user-in-a-bash-script-called-by-sudo
-echo -e "\e[7m*** Creating temp location on /home/$SUDO_USER/cache/...\e[0m"
-
-mkdir -p /home/$SUDO_USER/cache
-cd /home/$SUDO_USER/cache
 
 echo "Do you wish to have git installed"
 select yn in "Yes" "No"; do
@@ -68,6 +71,7 @@ select yn in "Yes" "No"; do
 done
 
 
+
 echo "Do you wish to install texlive and/or texmaker"
 select yn in "Texlive" "Both" "No"; do
 	case $yn in
@@ -75,40 +79,24 @@ select yn in "Texlive" "Both" "No"; do
 			apt-get update && apt-get install texlive-full
 			break;;
 		Both )
+			apt-get update && apt-get install texlive-full
+			URL="http://www.xm1math.net/texmaker/texmaker_ubuntu_"
 			#Detects system
 			if [ "i686" = `uname -m` ]; then
-			#http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3000_x32.tar.bz2
 			echo -e "\e[7m*** System x86 detected.\e[0m"
-				if [ "14.04" = `lsb_release -rs` ]; then
-				#
-				echo -e "\e[7m*** System 14.04 detected.\e[0m"
-				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_14.04_4.5_i386.deb
-				elif [ "15.04" = `lsb_release -rs` ]; then
-				#
-				echo -e "\e[7m*** System 15.04 detected.\e[0m"
-				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.04_4.5_i386.deb
-				elif [ "15.10" = `lsb_release -rs` ]; then
-				#
-				echo -e "\e[7m*** System 15.10 detected.\e[0m"
-				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.10_4.5_i386.deb
-				fi
+			echo -e "\e[7m*** System "`lsb_release -rs`" detected.\e[0m"
+			
+			curl -o texmaker.deb $URL`lsb_release -rs`"_4.5_i386.deb"
+
+
 			elif [ "x86_64" = `uname -m` ]; then
 			echo -e "\e[7m*** System x86-64 detected.\e[0m"
-				if [ "14.04" = `lsb_release -rs` ]; then
-				#
-				echo -e "\e[7m*** System 14.04 detected.\e[0m"
-				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_14.04_4.5_amd64.deb -O texmaker.deb
-				elif [ "15.04" = `lsb_release -rs` ]; then
-				#
-				echo -e "\e[7m*** System 15.04 detected.\e[0m"
-				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.04_4.5_amd64.deb -O texmaker.deb
-				elif [ "15.10" = `lsb_release -rs` ]; then
-				#
-				echo -e "\e[7m*** System 15.10 detected.\e[0m"
-				wget http://www.xm1math.net/texmaker/texmaker_ubuntu_15.10_4.5_amd64.deb -O texmaker.deb
-				fi
-				dpkg -i texmaker.deb
+			echo -e "\e[7m*** System "`lsb_release -rs`" detected.\e[0m"
+			
+			curl -o texmaker.deb $URL`lsb_release -rs`"_4.5_amd64.deb"
+
 			fi
+			dpkg -i texmaker.deb
 			 break;;
 		No ) break;;
 	esac
@@ -118,11 +106,3 @@ echo -e "\e[7m*** Deleting temp location on /home/$SUDO_USER/cache/...\e[0m"
 
 cd /home/$SUDO_USER/
 rm -rf cache
-
-echo "Checking if /usr/bin/zsh exists"
-
-#if [  "/usr/bin/zsh" = `which zsh` ]; then
-	#
-#	echo -e "\e[7m Restarting\e[0m"
-#	shutdown -r 0
-#fi
