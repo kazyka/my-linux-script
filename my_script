@@ -59,6 +59,9 @@ select yn in "Yes" "No"; do
 				echo -e "\e[7m*** Path don't match. Set to /bin/zsh\e[0m"
 				chsh
 				fi
+				cd /usr/bin
+				./zsh
+				cd /home/$SUDO_USER/
 			 break;;
 		No ) break;;
 	esac
@@ -115,3 +118,11 @@ echo -e "\e[7m*** Deleting temp location on /home/$SUDO_USER/cache/...\e[0m"
 
 cd /home/$SUDO_USER/
 rm -rf cache
+
+echo "Checking if /usr/bin/zsh exists"
+
+#if [  "/usr/bin/zsh" = `which zsh` ]; then
+	#
+#	echo -e "\e[7m Restarting\e[0m"
+#	shutdown -r 0
+#fi
