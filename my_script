@@ -113,5 +113,5 @@ done
 
 echo -e "\e[7m*** Deleting temp location on /home/$SUDO_USER/cache/...\e[0m"
 
-#cd /home/$SUDO_USER/
-#rm -rf cache
+cd /home/$SUDO_USER/
+rm -rf cache
